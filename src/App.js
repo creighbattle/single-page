@@ -12,7 +12,7 @@ function App() {
     selected: {}
   });
 
-  const apiurl ="http://www.omdbapi.com/?i=tt3896198&apikey=5b280ac0"
+  const apiurl ="https://www.omdbapi.com/?i=tt3896198&apikey=5b280ac0"
 
   const search = (e) => {
     if(e.key === 'Enter') {
@@ -43,6 +43,7 @@ function App() {
       <main>
         <Search handleInput={handleInput} search={search}/>
         <Results results={state.results} />
+        <h1>update</h1>
       </main>
     </div>
   );
