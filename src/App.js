@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import Search from './components/Search'
 import Results from './components/Results'
+import Popup from './components/Popup'
 
 function App() {
 
@@ -12,11 +13,11 @@ function App() {
     selected: {}
   });
 
-  const apiurl ="https://www.omdbapi.com/?i=tt3896198&apikey=5b280ac0"
-
+  const apiurl ="https://www.omdbapi.com/"
+ 
   const search = (e) => {
     if(e.key === 'Enter') {
-      axios(apiurl + "&s=" + state.s).then(({data}) => {
+      axios(apiurl + "?i=tt3896198" + "&apikey=5b280ac0" + "&s=" + state.s).then(({data}) => {
         let results = data.Search;
 
         setState(prevState => {
@@ -24,6 +25,7 @@ function App() {
         })
       });
     }
+
   }
 
   const handleInput = (e) => {
@@ -35,6 +37,23 @@ function App() {
 
   }
 
+  const openPopup = id => {
+    axios(apiurl + "?i=" + id + "&apikey=5b280ac0").then(({ data }) => {
+      let result = data;
+      console.log(id)
+
+      setState(prevState => {
+        return { ...prevState, selected: result }
+      });
+    });
+  }
+
+  const closePopup = () => {
+    setState(prevState => {
+      return { ...prevState, selected: {} }
+    });
+  }
+
   return (
     <div>
       <header>
@@ -42,8 +61,10 @@ function App() {
       </header>
       <main>
         <Search handleInput={handleInput} search={search}/>
-        <Results results={state.results} />
-        <h1>update</h1>
+
+        <Results results={state.results} openPopup={openPopup}/>
+
+        {(typeof state.selected.Title != 'undefined') ? <Popup selected={state.selected} closePopup={closePopup} /> : false}
       </main>
     </div>
   );
